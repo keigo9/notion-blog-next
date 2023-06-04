@@ -1,12 +1,18 @@
 import Head from "next/head";
 import Link from "next/link";
 import { getDatabase } from "../lib/notion";
-import { Text } from "./[id].js";
+import { Text, Tag } from "./[id].js";
 import styles from "./index.module.css";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 export default function Home({ posts }) {
+  const publishPosts = posts.filter(post => post.properties.publish.checkbox)
+  publishPosts.sort((a, b) => {
+    const timeA = new Date(a.last_edited_time).getTime();
+    const timeB = new Date(b.last_edited_time).getTime();
+    return timeB - timeA;
+  })
   return (
     <div>
       <Head>
@@ -48,7 +54,7 @@ export default function Home({ posts }) {
             </svg>
           </div>
           <h1>Next.js blog powered by Notion API</h1>
-          <p>
+          {/* <p>
             This is an example of a Next.js blog with data fetched with Notions
             API. The data comes from{" "}
             <a href={`https://www.notion.so/${databaseId}`}>this table</a>. Get
@@ -61,12 +67,12 @@ export default function Home({ posts }) {
               my blogpost
             </a>{" "}
             on building your own.
-          </p>
+          </p> */}
         </header>
 
         <h2 className={styles.heading}>All Posts</h2>
         <ol className={styles.posts}>
-          {posts.map((post) => {
+          {publishPosts.map((post) => {
             const date = new Date(post.last_edited_time).toLocaleString(
               "en-US",
               {
@@ -82,6 +88,7 @@ export default function Home({ posts }) {
                     <Text text={post.properties.Name.title} />
                   </Link>
                 </h3>
+                <Tag tags={post.properties.Tags.multi_select} />
 
                 <p className={styles.postDescription}>{date}</p>
                 <Link href={`/${post.id}`}>Read post →</Link>

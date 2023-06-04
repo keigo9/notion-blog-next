@@ -124,6 +124,16 @@
   border-radius: 12px;
 }
 
+.tagsContainer {
+  margin-bottom: 15px;
+}
+
+.tag {
+  padding: 3px 8px;
+  border-radius: 20px;
+  opacity: 0.9;
+}
+
 @media (prefers-color-scheme: dark) {
   .code,
   .table,

@@ -32,6 +32,32 @@ export const Text = ({ text }) => {
   });
 };
 
+export const Tag = ({ tags }) => {
+  if (!tags) {
+    return null;
+  }
+  return (
+    <div className={styles.tagsContainer}>
+      {tags.map((value) => {
+        const {
+          color,
+          id,
+          name,
+        } = value;
+        return (
+          <span
+            className={styles.tag}
+            key={id}
+            style={{ backgroundColor: color ? color : "#ccc" }}
+          >
+            {name}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
 const renderNestedList = (block) => {
   const { type } = block;
   const value = block[type];
@@ -195,9 +221,8 @@ const renderBlock = (block) => {
       return <div>{block.children.map((child) => renderBlock(child))}</div>;
     }
     default:
-      return `❌ Unsupported block (${
-        type === "unsupported" ? "unsupported by Notion API" : type
-      })`;
+      return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type
+        })`;
   }
 };
 
